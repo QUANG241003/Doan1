@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="grid-container">
+        <div class="grid-item">
+            <h1 style="text-align: center;" class="text-color-name">Setting</h1>
+            <h2 style="text-align: left;" class="text-color-name">Temperature</h2>
+            <img src="led_on.png" alt="" id="led">
+            <div>
+                <label class="label" for="fan-speed">Set Temperature:</label>
+                <label for="brightness"></label>
+                <input type="range" id="brightness" min="0" max="100" value="50" step="1">
+                <span id="brightness-value"></span>
+            </div>
+        </div>
+
+        <div class="grid-item2 item2"></div>
+
+        <div class="grid-item item3">
+            <img src="clock1.png" alt="">
+            <p>Time: <span id="clock">Loading...</span></p>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const clockElement = document.getElementById('clock');
+                    const fanSpeedInput = document.getElementById('fan-speed');
+                    let timerTimeout;
+
+                    // Function to update the time
+                    function updateTime(time) {
+                        const minutes = Math.floor(time / 60);
+                        const seconds = time % 60;
+                        clockElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+                        if (time > 0) {
+                            timerTimeout = setTimeout(function() {
+                                updateTime(time - 1);
+                            }, 1000);
+                        } else {
+                            // Automatically reset settings when time is up
+                            resetSettings();
+                        }
+                    }
+
+                    // Update the time when the value of fanSpeedInput changes
+                    fanSpeedInput.addEventListener('change', function() {
+                        const minutes = parseInt(fanSpeedInput.value);
+                        if (!isNaN(minutes) && minutes >= 0) {
+                            updateTime(minutes * 60);
+                        }
+                    });
+
+                    // Initial update when the page loads
+                    updateTime(parseInt(fanSpeedInput.value) * 60);
+
+                    function resetSettings() {
+                        // Clear any existing timer
+                        clearTimeout(timerTimeout);
+                        // Reset input values or perform other reset actions
+                        document.getElementById("fan-speed").value = "";
+                        document.getElementById("brightness").value = "50";
+                        clockElement.textContent = "00:00";
+
+                        // Reset values in Firebase
+                        firebase.database().ref('Time').set(0);
+                        firebase.database().ref('Setpoint').set(0);
+                        firebase.database().ref('permit').set(0);
+                        firebase.database().ref('thiet-bi').update({
+                            "dienthoai": 0
+                        });
+                    }
+
+                    // Add resetSettings function to the global scope for button onclick event
+                    window.resetSettings = resetSettings;
+                });
+            </script>
+        </div>
+
+        <div class="grid-item item4">
+            <h2 style="text-align: left;" class="text-color-name">TIME</h2>
+            <img src="clock.png" alt="" id="fan">
+            <div>
+                <label class="label" for="fan-speed">Set Time:</label>
+                <input class="input" type="number" id="fan-speed" min="0" max="100">
+            </div>
+            <span id="fan-status"></span>
+            <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+                <button type="button" id="reset-button" onclick="resetSettings()">Reset</button>
+                <button type="button" id="turn-on-button">OK</button>
+            </div>
+        </div>
+
+        <div class="grid-item item5">
+            <div>
+                <img src="temperature.png" alt="">
+                <p><span class="text-color-adjust">Temperature:</span> <span id="temperature">Loading...</span> °C</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div style="display: flex; justify-content: space-between;">
+            <h1 style="text-align: left;" class="text-color-name">Nguyễn Đình Quảng</h1>
+            <div id="time" class="clock"></div>
+            <h1 style="text-align: right;" class="text-color-name">21139044</h1>
+        </div>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/8.2.10/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.10/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.10/firebase-analytics.js"></script>
+    <script src="firebase.js"></script>
+    <script>
+        function dongho() {
+            var time = new Date();
+            var gio = time.getHours();
+            var phut = time.getMinutes();
+            var giay = time.getSeconds();
+            if (gio < 10)
+                gio = "0" + gio;
+            if (phut < 10)
+                phut = "0" + phut;
+            if (giay < 10)
+                giay = "0" + giay;
+            document.getElementById("time").innerHTML = gio + ":" + phut + ":" + giay;
+            setTimeout("dongho()", 1000);
+        }
+        dongho();
+    </script>
+</body>
+
+</html>

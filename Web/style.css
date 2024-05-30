@@ -1,0 +1,80 @@
+.grid-container {
+    display: grid;
+    width: 100%;
+    /* Chiều rộng 300px */
+    height: 100%;
+    /* Chiều cao 200px */
+}
+
+.grid-item {
+    background-color: rgba(16, 239, 102, 0.8);
+    text-align: center;
+    padding: 30px;
+    font-size: 30px;
+    width: 620px;
+    /* Chiều rộng 300px */
+    height: 500px;
+    /* Chiều cao 200px */
+}
+
+img {
+    width: 300px;
+    height: 200px;
+}
+
+.large-image {
+    width: 500px;
+    height: 345px;
+}
+
+.item2 {
+    grid-column: 3;
+    grid-row: 1 / span 2;
+    height: 120%;
+    width: 90%;
+}
+
+.text-color-adjust {
+    color: red;
+}
+
+.text-color-title {
+    color: rgb(26, 216, 51);
+}
+
+.text-color-name {
+    color: rgb(42, 119, 235);
+}
+
+.img1 {
+    width: 400px;
+    height: 400px;
+}
+
+.grid-item2 {
+    text-align: center;
+    padding: 20px;
+    font-size: 30px;
+    width: 620px;
+    height: 400px;
+}
+
+.grid-item.item5 button {
+    padding: 50px 50px;
+    /* Adjust the padding to increase or decrease button size */
+    font-size: 45px;
+    /* Adjust the font size */
+}
+
+.clock {
+    font-size: 30px;
+}
+
+.label {
+    font-size: 40px;
+    font-weight: 100bx;
+}
+
+.input {
+    font-size: 30px;
+}
